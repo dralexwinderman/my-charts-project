@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <title>השוואת אחוזי הדבקה - MSM לעומת Hetero</title>
+  <style>
+    /* עיצוב בסיסי לדף ולגרפים */
+    body {
+      direction: rtl;
+      font-family: sans-serif;
+      margin: 20px;
+      background: #f4f4f2;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .charts-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .chart-box {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 400px; /* אפשר לשנות גודל */
+    }
+    .chart-box canvas {
+      width: 100%;
+      height: 250px; /* אפשר לשנות גובה */
+    }
+    .chart-title {
+      text-align: center;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>השוואת אחוזי הדבקה במחלות מין (דוגמה)</h1>
+
+  <!-- אזור שמכיל את כל הגרפים -->
+  <div class="charts-container">
+    <!-- גרף 1: HIV -->
+    <div class="chart-box">
+      <h2 class="chart-title">HIV</h2>
+      <!-- כאן ציור הגרף:  <canvas> -->
+      <canvas id="chartHIV"></canvas>
+    </div>
+
+    <!-- גרף 2: Syphilis -->
+    <div class="chart-box">
+      <h2 class="chart-title">Syphilis (עגבת)</h2>
+      <canvas id="chartSyphilis"></canvas>
+    </div>
+
+    <!-- גרף 3: Gonorrhea -->
+    <div class="chart-box">
+      <h2 class="chart-title">Gonorrhea (זיבה)</h2>
+      <canvas id="chartGono"></canvas>
+    </div>
+
+    <!-- גרף 4: Chlamydia -->
+    <div class="chart-box">
+      <h2 class="chart-title">Chlamydia (כלמידיה)</h2>
+      <canvas id="chartChlm"></canvas>
+    </div>
+  </div>
+
+  <!-- 1) קודם כל טוענים את Chart.js מהקובץ המקומי שהורדת: -->
+  <script src="./js/chart.umd.js"></script>
+
+  <!-- 2) עכשיו הקוד שיוצר את הגרפים -->
+  <script>
+    // --------------------------
+    // נתונים לדוגמה ל-4 הגרפים
+    // --------------------------
+
+    // HIV
+    const dataHIV = {
+      labels: ["ארה\"ב", "אירופה"],
+      datasets: [
+        {
+          label: "גברים הומואים (MSM)",
+          data: [70, 65],
+          backgroundColor: "#84c0f6"
+        },
+        {
+          label: "גברים סטרייטים (Hetero)",
+          data: [30, 35],
+          backgroundColor: "#f5c182"
+        }
+      ]
+    };
+
+    // Syphilis (עגבת)
+    const dataSyph = {
+      labels: ["ארה\"ב", "אירופה"],
+      datasets: [
+        {
+          label: "גברים הומואים (MSM)",
+          data: [60, 50],
+          backgroundColor: "#d787ff"
+        },
+        {
+          label: "גברים סטרייטים (Hetero)",
+          data: [40, 50],
+          backgroundColor: "#ffdab9"
+        }
+      ]
+    };
+
+    // Gonorrhea (זיבה)
+    const dataGono = {
+      labels: ["ארה\"ב", "אירופה"],
+      datasets: [
+        {
+          label: "גברים הומואים (MSM)",
+          data: [55, 45],
+          backgroundColor: "#90ee90"
+        },
+        {
+          label: "גברים סטרייטים (Hetero)",
+          data: [45, 55],
+          backgroundColor: "#ffb3b3"
+        }
+      ]
+    };
+
+    // Chlamydia (כלמידיה)
+    const dataChlm = {
+      labels: ["ארה\"ב", "אירופה"],
+      datasets: [
+        {
+          label: "גברים הומואים (MSM)",
+          data: [40, 30],
+          backgroundColor: "#ffaaf0"
+        },
+        {
+          label: "גברים סטרייטים (Hetero)",
+          data: [60, 70],
+          backgroundColor: "#b0e0e6"
+        }
+      ]
+    };
+
+    // ---------------------------------------------------
+    // פונקציה ליצירת גרף עמודות (Bar) עם Chart.js
+    // ---------------------------------------------------
+    function createBarChart(canvasId, chartData, chartTitle) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: "אחוזים (%)"
+              }
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: chartTitle,
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            legend: {
+              position: 'top'
+            }
+          }
+        }
+      });
+    }
+
+    // ---------------------------------------------------
+    // יצירת 4 הגרפים
+    // ---------------------------------------------------
+    createBarChart("chartHIV", dataHIV, "HIV - השוואה MSM לעומת Hetero");
+    createBarChart("chartSyphilis", dataSyph, "Syphilis (עגבת) - MSM/Hetero");
+    createBarChart("chartGono", dataGono, "Gonorrhea (זיבה) - MSM/Hetero");
+    createBarChart("chartChlm", dataChlm, "Chlamydia (כלמידיה) - MSM/Hetero");
+  </script>
+</body>
+</html>
